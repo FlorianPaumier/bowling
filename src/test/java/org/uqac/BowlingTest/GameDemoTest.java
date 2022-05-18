@@ -6,6 +6,10 @@ import stev.bowling.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ *  game demo test
+ *
+ */
 class GameDemoTest {
 
     private Game game;
@@ -15,13 +19,33 @@ class GameDemoTest {
         game = new Game();
     }
 
+    /**
+     * test frame instance null
+     *
+     */
+    @Test
+    void testFrameInstanceNull() {
+        BowlingException thrown = assertThrows(BowlingException.class, () -> {
+           game.addFrame(null);
+        });
+
+        assertEquals("Frame #1 must be an instance of NormalFrame", thrown.getMessage());
+    }
+
+    /**
+     * test normal score format
+     *
+     */
     @Test
     void testNormalScoreFormat() {
-        game.addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2));
-        Frame frame = game.getFrame(0);
+        Frame frame = new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2);
         assertEquals("12", frame.toString());
     }
 
+    /**
+     * test normal score value
+     *
+     */
     @Test
     void testNormalScoreValue() {
         game.addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2));
@@ -58,16 +82,16 @@ class GameDemoTest {
 
     @Test
     void testShootDirection() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 1));
         game.addFrame(new NormalFrame(1));
-        game.addFrame(new NormalFrame(2));
-        game.addFrame(new NormalFrame(4));
-        game.addFrame(new NormalFrame(3));
-        game.addFrame(new NormalFrame(6));
-        game.addFrame(new NormalFrame(5));
-        game.addFrame(new NormalFrame(7));
-        game.addFrame(new NormalFrame(8));
-        game.addFrame(new NormalFrame(9));
-        game.addFrame(new LastFrame(10));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new NormalFrame(1));
+        game.addFrame(new LastFrame(1));
 
         //Dois Avoit une exception car pas dans l'ordre
         System.out.println(game);
