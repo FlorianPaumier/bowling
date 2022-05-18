@@ -241,9 +241,24 @@ class GameDemoTest {
                 .addFrame(new NormalFrame(1).setPinsDown(1, 2).setPinsDown(2, 8))
                 .addFrame(new LastFrame(1).setPinsDown(1, 1).setPinsDown(2, 9).setPinsDown(3, 3));
 
+
+        int[] scores3 = new int[]{3, 7, 14, 22, 22, 30, 39, 41, 61, 72};
+        Game game3 = (new Game())
+                .addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 3).setPinsDown(2, 1))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 2).setPinsDown(2, 5))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 7).setPinsDown(2, 1))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 0).setPinsDown(2, 0))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 4).setPinsDown(2, 4))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 9).setPinsDown(2, 0))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 1))
+                .addFrame(new NormalFrame(1).setPinsDown(1, 10))
+                .addFrame(new LastFrame(1).setPinsDown(1, 0).setPinsDown(2, 10).setPinsDown(3, 1));
+
         return Stream.of(
                 Arguments.arguments(game1, scores1),
-                Arguments.arguments(game2, scores2)
+                Arguments.arguments(game2, scores2),
+                Arguments.arguments(game3, scores3)
         );
     }
 
