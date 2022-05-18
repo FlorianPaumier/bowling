@@ -114,9 +114,11 @@ class GameDemoTest {
 
     @Test
     void testMaxShootLastFrame() {
-        assertThrows(BowlingException.class, () -> {
-            new NormalFrame(1).setPinsDown(0, 2);
-        }, "");
+        BowlingException thrown = assertThrows(BowlingException.class, () -> {
+            new LastFrame(1).setPinsDown(4, 2);
+        });
+
+        assertEquals("There is no such roll 4", thrown.getMessage());
     }
 
     @Test
