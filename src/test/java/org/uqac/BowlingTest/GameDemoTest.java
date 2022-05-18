@@ -2,32 +2,62 @@ package org.uqac.BowlingTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import stev.bowling.Game;
-import stev.bowling.LastFrame;
-import stev.bowling.NormalFrame;
+import stev.bowling.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameDemoTest {
 
     private Game game;
 
     @BeforeEach
-    void init(){
+    void init() {
         game = new Game();
     }
 
     @Test
-    void testNbRow(){
-        for (int i = 1; i <= 9; i++) {
-            game.addFrame(new NormalFrame(1));
-        }
-        game.addFrame(new LastFrame(10));
-
-        //String frame = game.getFrame(1);
-        // Regex nb char for row
+    void testNormalScoreFormat() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2));
+        Frame frame = game.getFrame(0);
+        assertEquals("12", frame.toString());
     }
 
     @Test
-    void testShootDirection(){
+    void testNormalScoreValue() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 1).setPinsDown(2, 2));
+        assertEquals(3, game.getCumulativeScore(1));
+    }
+
+    @Test
+    void testReserveScoreFormat() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 9).setPinsDown(2, 1));
+        Frame frame = game.getFrame(0);
+        assertEquals("9/", frame.toString());
+    }
+
+    @Test
+    void testDalotScoreFormat() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 9).setPinsDown(2, 0));
+        Frame frame = game.getFrame(0);
+        assertEquals("9-", frame.toString());
+    }
+
+    @Test
+    void testStrikeScoreFormat() {
+        game.addFrame(new NormalFrame(1).setPinsDown(1, 10));
+        Frame frame = game.getFrame(0);
+        assertEquals("X ", frame.toString());
+    }
+
+    @Test
+    void testStrikeLastFrame() {
+        game.addFrame(new NormalFrame(1));
+        Frame frame = new LastFrame(10).setPinsDown(1, 10).setPinsDown(2, 8);
+        assertEquals("X8", frame.toString());
+    }
+
+    @Test
+    void testShootDirection() {
         game.addFrame(new NormalFrame(1));
         game.addFrame(new NormalFrame(2));
         game.addFrame(new NormalFrame(4));
@@ -44,7 +74,7 @@ class GameDemoTest {
     }
 
     @Test
-    void testReset(){
+    void testReset() {
 
         for (int i = 1; i <= 9; i++) {
             game.addFrame(new NormalFrame(1));
@@ -54,10 +84,11 @@ class GameDemoTest {
     }
 
     @Test
-    void testMinRound(){}
+    void testMinRound() {
+    }
 
     @Test
-    void testMaxRound(){
+    void testInstanceLastFrame() {
 
         game.addFrame(new NormalFrame(1));
         game.addFrame(new NormalFrame(2));
@@ -69,39 +100,40 @@ class GameDemoTest {
         game.addFrame(new NormalFrame(8));
         game.addFrame(new NormalFrame(9));
         game.addFrame(new NormalFrame(10));
-        game.addFrame(new LastFrame(11));
-
-        //Good
     }
 
     @Test
-    void testMinShoot(){
+    void testMinShoot() {
         game.addFrame(new NormalFrame(1).setPinsDown(0, 2));
     }
 
     @Test
-    void testMaxShootNormalFrame(){
+    void testMaxShootNormalFrame() {
         game.addFrame(new NormalFrame(1).setPinsDown(3, 2));
     }
 
     @Test
-    void testMaxShootLastFrame(){
-        game.addFrame(new LastFrame(10).setPinsDown(4, 2));
+    void testMaxShootLastFrame() {
+        assertThrows(BowlingException.class, () -> {
+            new NormalFrame(1).setPinsDown(0, 2);
+        }, "");
     }
 
     @Test
-    void testMinNbPins(){
+    void testMinNbPins() {
         game.addFrame(new NormalFrame(1).setPinsDown(1, 0));
     }
 
     @Test
-    void testMaxNbPins(){
+    void testMaxNbPins() {
         game.addFrame(new NormalFrame(1).setPinsDown(1, 10));
     }
 
     @Test
-    void testPinsDownAtPosition(){}
-    
+    void testPinsDownAtPosition() {
+    }
+
     @Test
-    void testPinsDownAtWrongPosition(){}
+    void testPinsDownAtWrongPosition() {
+    }
 }
