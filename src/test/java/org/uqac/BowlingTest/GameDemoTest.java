@@ -22,6 +22,9 @@ class GameDemoTest {
 
     private Game game;
 
+    /**
+     * On génère automatiquement une nouvelle game pour chaque test afin d'éviter des effets de bords
+     */
     @BeforeEach
     void init() {
         game = new Game();
@@ -111,7 +114,7 @@ class GameDemoTest {
     }
 
     /**
-     * test normal score value
+     * Test du calcul du score sur un tour simple
      */
     @Test
     void testNormalScoreValue() {
@@ -119,33 +122,10 @@ class GameDemoTest {
         assertEquals(3, game.getCumulativeScore(1));
     }
 
-    @Test
-    void testReserveScoreFormat() {
-        game.addFrame(new NormalFrame(1).setPinsDown(1, 9).setPinsDown(2, 1));
-        Frame frame = game.getFrame(0);
-        assertEquals("9/", frame.toString());
-    }
 
-    @Test
-    void testDalotScoreFormat() {
-        game.addFrame(new NormalFrame(1).setPinsDown(1, 9).setPinsDown(2, 0));
-        Frame frame = game.getFrame(0);
-        assertEquals("9-", frame.toString());
-    }
-
-    @Test
-    void testStrikeScoreFormat() {
-        game.addFrame(new NormalFrame(1).setPinsDown(1, 10));
-        Frame frame = game.getFrame(0);
-        assertEquals("X ", frame.toString());
-    }
-
-    @Test
-    void testStrikeLastFrame() {
-        Frame frame = new LastFrame(10).setPinsDown(1, 10).setPinsDown(2, 8);
-        assertEquals("X8", frame.toString());
-    }
-
+    /**
+     * On test l'ordre d'ajout des différent tours
+     */
     @Test
     void testShootDirection() {
         game.addFrame(new NormalFrame(1).setPinsDown(1, 1));
@@ -170,6 +150,9 @@ class GameDemoTest {
         //game.reset();
     }
 
+    /**
+     * On test que notre système throw une exception si on donne un chiffre hors de la range autorisée
+     */
     @Test
     void testMinShoot() {
         BowlingException thrown = assertThrows(BowlingException.class, () -> {
@@ -179,6 +162,9 @@ class GameDemoTest {
         assertEquals("There is no such roll 0", thrown.getMessage());
     }
 
+    /**
+     * On test que notre système throw une exception si on donne un chiffre hors de la range autorisée
+     */
     @Test
     void testMaxShootNormalFrame() {
         BowlingException thrown = assertThrows(BowlingException.class, () -> {
@@ -188,6 +174,9 @@ class GameDemoTest {
         assertEquals("There is no such roll 3", thrown.getMessage());
     }
 
+    /**
+     * On test que notre système throw une exception si on donne un chiffre hors de la range autorisée
+     */
     @Test
     void testMaxShootLastFrame() {
         BowlingException thrown = assertThrows(BowlingException.class, () -> {
@@ -197,13 +186,31 @@ class GameDemoTest {
     }
 
 
+    /**
+     * On test via une suite de paramètre que le système retourne un format de score correct
+     * @param frame
+     * @param expectedFormat
+     */
     @ParameterizedTest
     @MethodSource
     void testFrameFormat(Frame frame, String expectedFormat) {
         assertEquals(expectedFormat, frame.toString());
     }
 
+    @Test
+    void testResetRound(){
 
+        Frame frame = new NormalFrame(1).setPinsDown(1, 5).setPinsDown(2, 3);
+        game.addFrame(frame);
+        frame.reset();
+        assertEquals(0, game.getCumulativeScore(1));
+    }
+    /**
+     *
+     * On test via une suite de paramètre que le système calcul un score correct
+     * @param game
+     * @param scores
+     */
     @ParameterizedTest
     @MethodSource
     void testFrameScore(Game game , int[] scores){
